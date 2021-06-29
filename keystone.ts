@@ -2,6 +2,8 @@
 import { config, createSchema } from '@keystone-next/keystone/schema';
 import 'dotenv/config';
 
+import { User } from './schemas/User';
+
 const databaseURL = process.env.DATABASE_URL;
 
 const sessionConfig = {
@@ -15,7 +17,7 @@ export default config({
     cors: {
       origin: [process.env.FRONTEND_URL],
       credentials: true,
-    }
+    },
   },
   db: {
     adapter: 'mongoose',
@@ -25,10 +27,11 @@ export default config({
   // https://next.keystonejs.com/docs/apis/schema
   lists: createSchema({
     //  TODO: Add Schema items here:
+    User,
   }),
   ui: {
     //  TODO: Change this for Roles:
     isAccessAllowed: () => true,
   },
   //  TODO: Add Session Values here:
-})
+});
