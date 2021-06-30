@@ -11,6 +11,7 @@ import { createAuth } from '@keystone-next/auth';
 import { config, createSchema } from '@keystone-next/keystone/schema';
 import 'dotenv/config';
 
+import { Product } from './schemas/Product';
 import { User } from './schemas/User';
 
 const databaseURL = process.env.DATABASE_URL;
@@ -51,6 +52,7 @@ export default withAuth(
     lists: createSchema({
       //  TODO: Add Schema items here:
       User,
+      Product,
     }),
     ui: {
       // ? Showed the UI only for people who pass this test
