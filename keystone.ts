@@ -10,6 +10,7 @@ import { createAuth } from '@keystone-next/auth';
 // https://next.keystonejs.com/docs/apis/config#system-configuration-api
 import { config, createSchema } from '@keystone-next/keystone/schema';
 import 'dotenv/config';
+import { insertSeedData } from './seed-data';
 
 import { ProductImage } from './schemas/ProductImage';
 import { Product } from './schemas/Product';
@@ -44,10 +45,17 @@ export default withAuth(
         credentials: true,
       },
     },
+    // https://keystonejs.com/docs/apis/config#db
     db: {
       adapter: 'mongoose',
       url: databaseURL,
-      // TODO: Add data seeding here:
+      // * Added seed data:
+      async onConnect(keystone) {
+        console.log('keystone:', keystone);
+        if (process.argv.includes('--seed-data')) {
+          await insertSeedData(keystone);
+        }
+      },
     },
     // https://next.keystonejs.com/docs/apis/schema
     lists: createSchema({
@@ -64,7 +72,7 @@ export default withAuth(
         return !!session?.data; // * Return a boolean!
       },
     },
-    // * ? Added Session Values here:
+    // * Added Session Values here:
     // ! Deprecated Method, check docs → https://next.keystonejs.com/docs/apis/session
     session: withItemData(statelessSessions(sessionConfig), {
       // ? GraphQL Query
