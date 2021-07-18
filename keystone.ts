@@ -34,6 +34,13 @@ const { withAuth } = createAuth({
     fields: ['name', 'email', 'password'],
     // TODO: Add in initial Roles here
   },
+  // * Docs: https://keystonejs.com/docs/apis/auth#password-reset-link
+  passwordResetLink: {
+    // TODO: Fix TS Error
+    async sendToken(args) {
+      console.log('args:', args);
+    },
+  },
 });
 
 // https://next.keystonejs.com/docs/apis/config
