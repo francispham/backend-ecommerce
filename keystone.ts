@@ -10,7 +10,9 @@ import { createAuth } from '@keystone-next/auth';
 // https://next.keystonejs.com/docs/apis/config#system-configuration-api
 import { config, createSchema } from '@keystone-next/keystone/schema';
 import 'dotenv/config';
+
 import { insertSeedData } from './seed-data';
+import { sendPasswordResetEmail } from './lib/mail';
 
 import { ProductImage } from './schemas/ProductImage';
 import { Product } from './schemas/Product';
@@ -36,9 +38,9 @@ const { withAuth } = createAuth({
   },
   // * Docs: https://keystonejs.com/docs/apis/auth#password-reset-link
   passwordResetLink: {
-    // TODO: Fix TS Error
     async sendToken(args) {
-      console.log('args:', args);
+      // ? Send a token to the user's email address
+      await sendPasswordResetEmail(args.token, args.identity);
     },
   },
 });
