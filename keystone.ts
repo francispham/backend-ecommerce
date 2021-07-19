@@ -15,6 +15,7 @@ import { insertSeedData } from './seed-data';
 import { sendPasswordResetEmail } from './lib/mail';
 
 import { ProductImage } from './schemas/ProductImage';
+import { CartItem } from './schemas/CartItem';
 import { Product } from './schemas/Product';
 import { User } from './schemas/User';
 
@@ -72,6 +73,7 @@ export default withAuth(
       User,
       Product,
       ProductImage,
+      CartItem,
     }),
     ui: {
       // ? Showed the UI only for people who pass this test
