@@ -7,11 +7,13 @@ import {
 // https://next.keystonejs.com/docs/apis/auth
 import { createAuth } from '@keystone-next/auth';
 
-// https://next.keystonejs.com/docs/apis/config#system-configuration-api
+// https://keystonejs.com/docs/apis/schema
 import { config, createSchema } from '@keystone-next/keystone/schema';
 import 'dotenv/config';
 
+import { Session } from './types';
 import { insertSeedData } from './seed-data';
+import { extendGraphqlSchema } from './mutations';
 import { sendPasswordResetEmail } from './lib/mail';
 
 import { ProductImage } from './schemas/ProductImage';
@@ -26,6 +28,7 @@ const sessionConfig = {
   secret: process.env.COOKIE_SECRET,
 };
 
+//  * Docs: https://keystonejs.com/docs/apis/auth#authentication-api
 const { withAuth } = createAuth({
   // ? Required options
   listKey: 'User',
@@ -46,8 +49,8 @@ const { withAuth } = createAuth({
   },
 });
 
-// https://next.keystonejs.com/docs/apis/config
 export default withAuth(
+  //  * Docs: https://keystonejs.com/docs/apis/config#system-configuration-api
   config({
     server: {
       cors: {
@@ -55,19 +58,18 @@ export default withAuth(
         credentials: true,
       },
     },
-    // https://keystonejs.com/docs/apis/config#db
+    //  * Docs: https://keystonejs.com/docs/apis/config#db
     db: {
       adapter: 'mongoose',
       url: databaseURL,
       // * Added seed data:
       async onConnect(keystone) {
-        console.log('keystone:', keystone);
         if (process.argv.includes('--seed-data')) {
           await insertSeedData(keystone);
         }
       },
     },
-    // https://next.keystonejs.com/docs/apis/schema
+    //  * https://keystonejs.com/docs/apis/config#lists
     lists: createSchema({
       //  TODO: Add Schema items here:
       User,
@@ -75,12 +77,14 @@ export default withAuth(
       ProductImage,
       CartItem,
     }),
+    //  * Docs: // https://keystonejs.com/docs/apis/config#extend-graphql-schema
+    extendGraphqlSchema,
+    // * Docs: https://keystonejs.com/docs/apis/config#ui
     ui: {
       // ? Showed the UI only for people who pass this test
-      isAccessAllowed: ({ session }) => {
-        console.log('session:', session);
-        // TODO: Fix TS Error
-        return !!session?.data; // * Return a boolean!
+      isAccessAllowed: ({ session }): boolean => {
+        const currentSession = session as Session;
+        return !!currentSession?.data;
       },
     },
     // * Added Session Values here:
