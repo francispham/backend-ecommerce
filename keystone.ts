@@ -17,8 +17,10 @@ import { extendGraphqlSchema } from './mutations';
 import { sendPasswordResetEmail } from './lib/mail';
 
 import { ProductImage } from './schemas/ProductImage';
+import { OrderItem } from './schemas/OrderItem';
 import { CartItem } from './schemas/CartItem';
 import { Product } from './schemas/Product';
+import { Order } from './schemas/Order';
 import { User } from './schemas/User';
 
 const databaseURL = process.env.DATABASE_URL;
@@ -73,9 +75,11 @@ export default withAuth(
     lists: createSchema({
       //  TODO: Add Schema items here:
       User,
+      Order,
       Product,
-      ProductImage,
       CartItem,
+      OrderItem,
+      ProductImage,
     }),
     //  * Docs: // https://keystonejs.com/docs/apis/config#extend-graphql-schema
     extendGraphqlSchema,

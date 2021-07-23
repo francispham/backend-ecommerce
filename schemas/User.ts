@@ -18,8 +18,9 @@ export const User = list({
       ui: {
         createView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'read' },
-        // TODO: Add Roles and Order
       },
     }),
+    orders: relationship({ ref: 'Order.user', many: true }),
+    // TODO: Add Roles
   },
 });
