@@ -2,6 +2,7 @@
 import { graphQLSchemaExtension } from '@keystone-next/keystone/schema';
 
 import addToCart from './addToCart';
+import checkoutNow from './checkoutNow';
 
 // ? Make a fake GraphQL tagged template literal - JUST FOR GRAPHQL TEXT HIGHLIGHTING!!!
 const graphql = String.raw; //  * Docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/raw
@@ -12,12 +13,14 @@ export const extendGraphqlSchema = graphQLSchemaExtension({
   typeDefs: graphql`
     type Mutation {
       addToCart(productId: ID): CartItem
+      checkoutNow(token: String!): Order
     }
   `,
   // * Docs: https://keystonejs.com/docs/guides/custom-fields#output
   resolvers: {
     Mutation: {
       addToCart,
+      checkoutNow,
     },
   },
 });
