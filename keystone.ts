@@ -22,6 +22,7 @@ import { CartItem } from './schemas/CartItem';
 import { Product } from './schemas/Product';
 import { Order } from './schemas/Order';
 import { User } from './schemas/User';
+import { Role } from './schemas/Role';
 
 const databaseURL = process.env.DATABASE_URL;
 
@@ -73,7 +74,7 @@ export default withAuth(
     },
     //  * https://keystonejs.com/docs/apis/config#lists
     lists: createSchema({
-      //  TODO: Add Schema items here:
+      Role,
       User,
       Order,
       Product,
