@@ -1,9 +1,16 @@
 // https://keystonejs.com/docs/apis/fields
 import { integer, relationship, select, text } from '@keystone-next/fields';
 import { list } from '@keystone-next/keystone/schema';
+import { isSignedIn } from '../access';
 
 export const Product = list({
-  // TODO: Add Access Control - https://next.keystonejs.com/docs/apis/access-control
+  // * Access Control - https://next.keystonejs.com/docs/apis/access-control
+  access: {
+    create: isSignedIn,
+    read: isSignedIn,
+    update: isSignedIn,
+    delete: isSignedIn,
+  },
 
   // * Fields Option - https://next.keystonejs.com/docs/apis/schema#fields
   fields: {

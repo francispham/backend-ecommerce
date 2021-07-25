@@ -31,6 +31,7 @@ export const permissionFields = {
 // * Docs: https://stackoverflow.com/questions/55377365/what-does-keyof-typeof-mean-in-typescript
 export type Permission = keyof typeof permissionFields;
 
+// ? Export permissionsList as an Array of all the Permissions that are keys in the permissionFields Object
 export const permissionsList: Permission[] = Object.keys(
   permissionFields
 ) as Permission[];

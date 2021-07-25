@@ -23,6 +23,7 @@ import { Product } from './schemas/Product';
 import { Order } from './schemas/Order';
 import { User } from './schemas/User';
 import { Role } from './schemas/Role';
+import { permissionsList } from './schemas/fields';
 
 const databaseURL = process.env.DATABASE_URL;
 
@@ -96,7 +97,7 @@ export default withAuth(
     // ! Deprecated Method, check docs → https://next.keystonejs.com/docs/apis/session
     session: withItemData(statelessSessions(sessionConfig), {
       // ? GraphQL Query
-      User: 'id',
+      User: `id name email role { ${permissionsList.join(' ')} }`, // ? Items in permissionsList are added into a String with Space as separator
     }),
   })
 );
