@@ -75,4 +75,14 @@ export const rules = {
     // ? Only See the Available Products
     return { status: 'AVAILABLE' };
   },
+  canManageUsers({ session }: ListAccessArgs) {
+    if (!isSignedIn({ session })) return false;
+
+    if (permissions.canManageUsers({ session })) {
+      return true;
+    }
+
+    // ? They only can update themselves!
+    return { id: session.itemId };
+  },
 };

@@ -1,12 +1,24 @@
 import { list } from '@keystone-next/keystone/schema';
+
 // https://next.keystonejs.com/docs/apis/fields
 import { text, password, relationship } from '@keystone-next/fields';
 
-// https://next.keystonejs.com/docs/apis/config#lists
-export const User = list({
-  // TODO: Add Access Control - https://next.keystonejs.com/docs/apis/access-control
-  // TODO: Add UI Option Control - https://next.keystonejs.com/docs/apis/schema#ui
+import { isSignedIn, rules, permissions } from '../access';
 
+// * Docs: https://next.keystonejs.com/docs/apis/config#lists
+export const User = list({
+  access: {
+    create: isSignedIn,
+    read: rules.canManageUsers,
+    update: rules.canManageUsers,
+    // ? Only User with Permission can delete themselves!
+    delete: permissions.canManageUsers,
+  },
+  ui: {
+    // Hide the BE UI from Regular Users
+    hideCreate: (args) => !permissions.canManageUsers(args),
+    hideDelete: (args) => !permissions.canManageUsers(args),
+  },
   // * Fields Option - https://next.keystonejs.com/docs/apis/schema#fields
   fields: {
     name: text({ isRequired: true }),
@@ -21,7 +33,13 @@ export const User = list({
       },
     }),
     orders: relationship({ ref: 'Order.user', many: true }),
-    role: relationship({ ref: 'Role.assignedTo', many: false }),
+    role: relationship({
+      ref: 'Role.assignedTo',
+      access: {
+        create: permissions.canManageUsers,
+        update: permissions.canManageUsers,
+      },
+    }),
     products: relationship({ ref: 'Product.user', many: true }),
   },
 });
