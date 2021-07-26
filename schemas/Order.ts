@@ -2,8 +2,15 @@ import { integer, relationship, text, virtual } from '@keystone-next/fields';
 import { list } from '@keystone-next/keystone/schema';
 
 import formatMoney from '../lib/formatMoney';
+import { isSignedIn, rules } from '../access';
 
 export const Order = list({
+  access: {
+    create: isSignedIn,
+    read: rules.canOrder,
+    update: () => false,
+    delete: () => false,
+  },
   fields: {
     //  * Docs: https://keystonejs.com/docs/apis/fields#virtual-type
     label: virtual({
